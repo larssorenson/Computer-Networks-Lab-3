@@ -1,8 +1,7 @@
-#include "mychecksum1.h"
+#include "mychecksum.h"
 
 int main(int argc, char** argv)
 {
-
 	// Need at least 2 arguments
 	if(argc < 3)
 	{

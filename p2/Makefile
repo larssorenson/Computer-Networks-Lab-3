@@ -1,9 +1,9 @@
 CC		=gcc
 FLAGS		=-g -Wall -std=c99
-SOURCES		=checksum.c main.c reverseLong.c
-HEADERS		=mychecksum1.h
-OBJECTS		=$(SOURCES:.c=.o)
 EXECUTABLE	=mychecksum1
+SOURCES		=checksum.c $(EXECUTABLE).c reverseLong.c
+HEADERS		=mychecksum.h
+OBJECTS		=$(SOURCES:.c=.o)
 RM		=rm -rf
 
 .SUFFIXES:

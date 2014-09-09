@@ -1,4 +1,4 @@
-#include "mychecksum1.h"
+#include "mychecksum.h"
 
 unsigned long long checksum(int file)
 {

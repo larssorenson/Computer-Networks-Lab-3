@@ -1,4 +1,4 @@
-#include "mychecksum1.h"
+#include "mychecksum.h"
 
 const int ENDCHECK = 1;
 #define is_bigendian() ( (*(char*)&ENDCHECK) == 0 )
