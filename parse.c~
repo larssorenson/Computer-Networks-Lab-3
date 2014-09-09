@@ -45,7 +45,27 @@ Alarm* parse(char* file)
 					if(buffer[0] == ' ')
 					{
 						timeFlag = 1;
-						
+						Alarm* curr = currentAlarm;
+						while(curr->time > curr->prev->time)
+						{
+							Alarm* next = curr->next;
+							Alarm* prev = curr->prev;
+							prev->next = next;
+							next->prev = prev;
+							curr->next = prev;
+							if(prev->prev)
+							{
+								prev->prev->next = curr;
+								curr->prev = prev->prev;
+							}
+							
+							else
+							{
+								curr->prev = NULL;
+								prev->prev = curr;
+							}
+							
+						}
 						#ifdef Debug
 							char* currentTime = timeToString(currentAlarm->time);
 							if(currentTime)

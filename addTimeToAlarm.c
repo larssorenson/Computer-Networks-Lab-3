@@ -1,6 +1,6 @@
 #include "myreminder.h"
 
-int addTimeToAlarm(Alarm* currentAlarm, char time)
+int addTimeToAlarm(char time)
 {
 	switch(time)
 	{
