@@ -2,6 +2,8 @@
 
 int addTimeToAlarm(char time)
 {
+	// Parse the character and throw it through a switch
+	// Moves current time up one digit place, adds in the relevant character
 	switch(time)
 	{
 		case '9':

@@ -2,8 +2,10 @@
 
 Alarm* parse(char* file)
 {
+	// If we have a proper file name
 	if(file)
 	{
+		// Declare our single byte buffer
 		char buffer[2];
 		buffer[1] = '\0';
 		int fd = open(file, O_RDONLY);
@@ -11,24 +13,40 @@ Alarm* parse(char* file)
 		int resp;
 		int timeFlag = 0;
 		int msgCount = 0;
+		
+		// If we have a proper file descriptor
 		if(fd > 1)
 		{
 			currentAlarm = (Alarm*)malloc(sizeof(Alarm));
 			currentAlarm->prev = NULL;
 			
+			// While we've read a byte
 			while(c != 0)
 			{
 				c = read(fd, buffer, 1);
 				if(c <= 0)
 					continue;
 				
+				
+				// Null terminator character signals end of parsing
+				// We alloc a new link at the end of parsing a line
+				// so it should be empty
 				if(buffer[0] == '\0')
 				{
+					// Move back a step
 					currentAlarm = currentAlarm->prev;
+					
+					// Cut off the current link
 					currentAlarm->next->prev = NULL;
+					
+					// Free up memory if it's being used
 					if(currentAlarm->next->reminder)
 						free(currentAlarm->next->reminder);
+						
+					// Free the dangling link
 					free(currentAlarm->next);
+					
+					// Cap off the list
 					currentAlarm->next = NULL;
 					c = 0;
 					continue;
@@ -40,10 +58,15 @@ Alarm* parse(char* file)
 					write(2, "\r\n", 2);
 				#endif
 				
+				// Flag to indicate if we're parsing time or message
 				if(!timeFlag)
 				{
+				
+					// first space should only come after time
 					if(buffer[0] == ' ')
 					{
+					
+						// Flip the flag, we're parsing message now
 						timeFlag = 1;
 						
 						#ifdef Debug
@@ -57,16 +80,20 @@ Alarm* parse(char* file)
 							}
 							
 						#endif
+						
+						// Malloc space for the current reminder and zero it
 						currentAlarm->reminder = (char*)malloc(sizeof(char)*1024);
 						memset(currentAlarm->reminder, 0, 1024);
 					}
 					
 					else
 					{
+						// If we're parsing time, continually update the time of the current alarm
 						resp = addTimeToAlarm(buffer[0]);
 						if(resp)
 						{
 							write(2, "Error! Failed to update alarm's time! Check input of file\r\n", 59);
+							return NULL;
 						}
 						
 					}
@@ -75,6 +102,7 @@ Alarm* parse(char* file)
 				
 				else
 				{
+					// If we're done parsing time, as long as we're not reading new line or EOL, update the message
 					if(buffer[0] != '\r' && buffer[0] != '\n' && buffer[0] != '\0' && msgCount < 1024)
 					{
 						strcat(currentAlarm->reminder, buffer);
@@ -84,6 +112,7 @@ Alarm* parse(char* file)
 					else
 					{
 						timeFlag = 0;
+						msgCount = 0;
 						#ifdef Debug
 							if(currentAlarm->reminder)
 							{
@@ -97,8 +126,13 @@ Alarm* parse(char* file)
 								write(2, "Error reading Reminder!\r\n", 25);
 							}
 						#endif
+						// Alloc space for the next alarm
 						currentAlarm->next = (Alarm*)malloc(sizeof(Alarm));
+						
+						// Maintain the chain
 						currentAlarm->next->prev = currentAlarm;
+						
+						// Move forward
 						currentAlarm = currentAlarm->next;
 					}
 					
@@ -106,19 +140,31 @@ Alarm* parse(char* file)
 				
 			}
 			
+			// Double check that the list is properly maintained
 			currentAlarm->next = NULL;
+			
+			// Move the pointer back to the beginning of the list, as we operate on this list globally
 			while(currentAlarm->prev != NULL)
 			{
+				// If the last alarm does not have an actual reminder, then we should clip off the link
 				if(currentAlarm->next && !currentAlarm->next->reminder)
 				{
-					currentAlarm->next->prev = NULL;
-					free(currentAlarm->next);
-					currentAlarm->next = NULL;
+					Alarm* last = currentAlarm->next;
+					if(currentAlarm->next->next)
+					{
+						currentAlarm->next = currentAlarm->next->next;
+						currentAlarm->next->next->prev = currentAlarm;
+					}
+					else
+						currentAlarm->next = NULL;
+					
+					free(last);
 				}
 				
 				currentAlarm = currentAlarm->prev;
 			}
 			
+			// Indicate that we successfully parsed the file
 			return currentAlarm;
 		}
 		
@@ -127,6 +173,7 @@ Alarm* parse(char* file)
 	return NULL;
 }
 
+// Modular testing
 #ifdef Testing
 int main(int argc, char** argv)
 {

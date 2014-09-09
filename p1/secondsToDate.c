@@ -1,5 +1,8 @@
 #include "myreminder.h"
 
+// This was to be used for timestamping reminders
+// but things like leap years / leap seconds make it imprecise
+// so it was easier to just print out the unix epoch
 char* secondsToDate(int time)
 {
 	int year = 1970;

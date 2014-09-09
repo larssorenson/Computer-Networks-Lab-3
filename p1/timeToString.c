@@ -1,5 +1,10 @@
 #include "myreminder.h"
 
+
+// This will take in an integer and go digit by digit through it
+// and construct a string that will represent the time.
+// Unfortunately, the way it is written the number will be reversed
+// so we have to reverse it before we return it
 char* timeToString(int time)
 {
 	char* result = malloc(sizeof(char)*11);

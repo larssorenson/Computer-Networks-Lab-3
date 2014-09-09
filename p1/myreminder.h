@@ -8,6 +8,11 @@
 #include <signal.h>
 
 #undef Debug
+#undef Testing
+
+#ifdef Debug
+	#include <stdio.h>
+#endif
 
 typedef struct Alarm Alarm;
 struct Alarm
