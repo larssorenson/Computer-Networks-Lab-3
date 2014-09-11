@@ -6,7 +6,7 @@ int main(int argc, char** argv)
 	// Need the file to read from
 	if(argc < 2)
 	{
-		printf("You must supply a file name to read from!\r\n");
+		write(2, "You must supply a file name to read from!\r\n", 43);
 		return 1;
 	}
 	
@@ -14,7 +14,7 @@ int main(int argc, char** argv)
 	int resp = setAlarmHandler();
 	if(resp)
 	{
-		printf("Error! Could not set Signal Alarm Handler!\r\n");
+		write(2, "Error! Could not set Signal Alarm Handler!\r\n", 44);
 		return 1;
 	}
 	

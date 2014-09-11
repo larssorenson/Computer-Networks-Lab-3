@@ -7,9 +7,7 @@ void writeTimeOfDay()
 	if(time)
 	{
 		gettimeofday(time, NULL);
-		char* strTime = timeToString((int)(time->tv_sec));
-		write(2, strTime, strlen(strTime));
+		printInt((int)time->tv_sec);
 		write(2, " ", 1);
-		free(strTime);
 	}
 }

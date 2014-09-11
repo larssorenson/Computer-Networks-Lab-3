@@ -25,6 +25,7 @@ struct Alarm
 
 Alarm* currentAlarm;
 
+void printInt(int);
 Alarm* parse(char*);
 void writeTimeOfDay();
 int addTimeToAlarm(char);

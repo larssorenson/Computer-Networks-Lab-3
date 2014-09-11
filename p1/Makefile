@@ -1,6 +1,6 @@
 CC		=gcc
 FLAGS		=-g -Wall
-SOURCES		=writeTimeOfDay.c main.c setAlarmHandler.c setAlarm.c timeToString.c writeAlarm.c parse.c addTimeToAlarm.c
+SOURCES		=writeTimeOfDay.c main.c setAlarmHandler.c setAlarm.c timeToString.c writeAlarm.c parse.c addTimeToAlarm.c printInt.c
 HEADERS		=myreminder.h
 OBJECTS		=$(SOURCES:.c=.o)
 EXECUTABLE	=myreminder
