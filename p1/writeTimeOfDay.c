@@ -7,7 +7,12 @@ void writeTimeOfDay()
 	if(time)
 	{
 		gettimeofday(time, NULL);
+		#ifdef Debug
+			printf("Time: %d\r\n", (int)time->tv_sec);
+		#endif
 		printInt((int)time->tv_sec);
 		write(2, " ", 1);
+		free(time);
 	}
+	
 }
