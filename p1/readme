@@ -1,0 +1,21 @@
+To compile:
+	Without Debugging:
+		sh compile.sh
+		OR
+		make
+	With Debugging:
+		sh compile.sh 1
+		OR
+		make DEBUG="-D Debug"
+		
+To run:
+	./myreminder <reminders.txt>
+	
+Reminders file struct:
+	<number> <message>\n
+	<number> <message>\n
+	...
+	<number> <message>
+	
+	Program only supports numerically sorted reminders list.
+	Behaviour is undefined for reminders that are not sorted numerically.
