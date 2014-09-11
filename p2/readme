@@ -1,0 +1,13 @@
+To compile:
+	With debugging enabled:
+		sh compile.sh 1
+	With debugging disabled:
+		sh compile.sh
+		OR
+		make all EXECUTABLE=mychecksum1
+		OR
+		make all EXECUTABLE=mychecksum2
+		
+To run:
+	./mychecksum1 <in file> <out file>
+	./mychecksum2 <in file> <out file>

@@ -1,5 +1,6 @@
 CC		=gcc
-FLAGS		=-g -Wall -std=c99
+DEBUG		=-U Debug
+FLAGS		=-g -Wall -std=c99 $(DEBUG)
 EXECUTABLE	=mychecksum2
 SOURCES		=checksum.c $(EXECUTABLE).c reverseLong.c reverseChecksum.c printInt.c printLong.c printUnsignedLongLong.c
 HEADERS		=mychecksum.h
@@ -13,10 +14,11 @@ all: $(EXECUTABLE) $(SOURCES) $(HEADERS)
 	
 $(EXECUTABLE): $(OBJECTS)
 	$(CC) $(FLAGS) $(OBJECTS) -o $@
+	$(RM) *.o
 
 .c.o:
 	$(CC) $(FLAGS) -c $< -o $@
 	
 clean:
-	$(RM) $(EXECUTABLE) *.o *.core core *~
+	$(RM) mychecksum1 mychecksum2 *.o *.core core *~
 	

@@ -28,48 +28,66 @@ int main(int argc, char** argv)
 	// and store it in check
 	unsigned long long check = 0;
 	unsigned char buffer[2];
-	unsigned char* k = (unsigned char*)&check;
-	int x;
+	unsigned char* check_ptr = (unsigned char*)&check;
 	int c;
-	for(x = 0; x < 8; x++)
+	
+	// Read 8 bytes total
+	for(int i = 0; i < 8; i++)
 	{
+		// Zero buffer to make sure we don't add any residual data
 		buffer[0] = 0;
 		buffer[1] = 0;
+		
+		// Read a byte
 		c = read(fd, buffer, 1);
 		if(c != 0)
 		{
-			k[x] = (unsigned long long)buffer[0];
+			// Pointer "magic" to put the bytes into the memory positions
+			// of the long long
+			check_ptr[i] = (unsigned long long)buffer[0];
 			#ifdef Debug
 				printf("Read: %02x\t%0d\r\n", buffer[0], buffer[0]);
 			#endif
 		}
+		
 	}
 	
+	
+	// Pointer to the read in checksum
+	unsigned char* sum_ptr = (unsigned char*)&sum;
+	
+	// Print read checksum
+	write(2, "Read Checksum: ", 15);
+	printUnsignedLongLong(sum);
+	write(2, "\r\n\t", 3);
+	
+	// Print hex of read checksum
+	for(int i = 0; i < sizeof(unsigned long long); i++)
+		printf("%02x ", sum_ptr[i]);
+	printf("\r\n\r\n\t");
+	
 	#ifdef Debug	
-		unsigned char* p = (unsigned char*)&check;
-		for(int q = 0; q < sizeof(unsigned long long); q++)
-			printf("%02x ", p[q]);
+		for(int i = 0; i < sizeof(unsigned long long); i++)
+			printf("%02x ", check_ptr[i]);
 		printf("%lld\r\n", check);
 	#endif
 	
 	// We read it in the opposite endian order of our system, so we have to reverse it
 	check = reverseLong(check);
 	
+	// Output our calculated checksum
+	write(2, "Calculated Checksum: ", 22);
+	printUnsignedLongLong(check);
+	write(2, "\r\n", 2);
+
+	// print hex form of the calculated checksum
+	for(int i = 0; i < sizeof(unsigned long long); i++)
+		printf("%02x ", check_ptr[i]);
+	printf("\r\n\r\n");
 	#ifdef Debug
-		for(int q = 0; q < sizeof(unsigned long long); q++)
-			printf("%02x ", p[q]);
 		printf("%lld\r\n", check);
 	#endif
 	
-	write(2, "Read Checksum: ", 15);
-	
-	printUnsignedLongLong(sum);
-	
-	write(2, "\tCalculated Checksum: ", 22);
-	
-	printUnsignedLongLong(check);
-	
-	write(2, "\r\n", 2);
 	
 	// Checksum check
 	if(sum != check)
@@ -85,28 +103,22 @@ int main(int argc, char** argv)
 	// reset the read position
 	lseek(fd, 0, SEEK_SET);
 	
-	if(fd <= 0)
-	{
-		write(2, "The read file failed to open!\r\n", 31);
-		return 1;
-	}
-	
 	// Open the file we're going to write to
 	int out = open(argv[2], O_WRONLY|O_CREAT);
-	
 	if(out <= 0)
 	{
 		write(2, "The write file failed to open!\r\n", 32);
 		return 1;
 	}
 	
-	// Byte read count (c)
+	// Byte read count (c), should be 1 as long as we're reading the file
 	c = 1;
 	buffer[0] = 0;
 	buffer[1] = 0;
+	int written = 0;
 	
 	// Read the bytes from one file and write to the other
-	while(c != 0 && sum != 0)
+	while(c != 0 && written < (length-8))
 	{
 		c = read(fd, buffer, 1);
 		#ifdef Debug
@@ -115,7 +127,7 @@ int main(int argc, char** argv)
 		if(c != 0)
 		{
 			write(out, buffer, 1);
-			sum -= buffer[0];
+			written++;
 			#ifdef Debug
 				printf("Sum: %lld\r\n", sum);
 			#endif
