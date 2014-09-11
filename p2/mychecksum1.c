@@ -15,9 +15,8 @@ int main(int argc, char** argv)
 	// Generate checksum of the file
 	unsigned long long sum = checksum(fd);
 	
-	// Close and re-open to reset the read position
-	close(fd);
-	fd = open(argv[1], O_RDONLY);
+	// reset the read position
+	lseek(fd, 0, SEEK_SET);
 	
 	if(fd <= 0)
 	{

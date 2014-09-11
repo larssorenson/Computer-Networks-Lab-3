@@ -1,7 +1,7 @@
 CC		=gcc
 FLAGS		=-g -Wall -std=c99
-EXECUTABLE	=mychecksum1
-SOURCES		=checksum.c $(EXECUTABLE).c reverseLong.c
+EXECUTABLE	=mychecksum2
+SOURCES		=checksum.c $(EXECUTABLE).c reverseLong.c reverseChecksum.c printInt.c printLong.c printUnsignedLongLong.c
 HEADERS		=mychecksum.h
 OBJECTS		=$(SOURCES:.c=.o)
 RM		=rm -rf
