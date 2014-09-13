@@ -1,8 +1,8 @@
 CC		=gcc
 DEBUG		=-U Debug
 FLAGS		=-g -Wall -std=c99 $(DEBUG)
-EXECUTABLE	=myping
-SOURCES		=$(EXECUTABLE).c
+EXECUTABLE	=mypingd
+SOURCES		=$(EXECUTABLE).c printInt.c numberFromString.c
 HEADERS		=ping.h
 OBJECTS		=$(SOURCES:.c=.o)
 RM		=rm -rf
@@ -20,5 +20,5 @@ $(EXECUTABLE): $(OBJECTS)
 	$(CC) $(FLAGS) -c $< -o $@
 	
 clean:
-	$(RM) ping pingd *.o *.core core *~
+	$(RM) myping mypingd *.o *.core core *~
 	

@@ -1,10 +1,18 @@
-#include <sys/types.h>
-#include <sys/socket.h>
-#include <sys/time.h>
-#include <unistd.h>
-#include <signal.h>
+#include "ping.h"
 
 int main(int argc, char** argv)
 {
+	if (argc < 2)
+	{
+		write(2, "You must supply a port!\r\n", 25);
+		return -1;
+	}
+	
+	int port = numberFromString(argv[1]);
+	#ifdef Debug
+		printInt(port);
+	#endif
+	
+	
 	
 }
