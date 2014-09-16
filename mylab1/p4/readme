@@ -1,0 +1,13 @@
+To compile:
+	With debugging enabled:
+		sh compile.sh 1
+	With debugging disabled:
+		sh compile.sh
+		OR
+		make all EXECUTABLE=myping
+		OR
+		make all EXECUTABLE=mypingd
+		
+To run:
+	./myping <ip> <port>
+	./mypingd <port>
