@@ -1,4 +1,4 @@
-#include "mychecksum.h"
+#include "ping.h"
 
 void printLong(long number)
 {
@@ -12,7 +12,8 @@ void printLong(long number)
 		number /= 10;
 	}
 	
-	for(int x = length; x > -1; x--)
+	int x;
+	for(x = length; x > -1; x--)
 	{
 		write(2, &output[x], 1);
 	}

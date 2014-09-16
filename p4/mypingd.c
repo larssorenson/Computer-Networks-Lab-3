@@ -27,7 +27,7 @@ int main(int argc, char** argv)
 	int msglen = 1024;
 	
 	
-	int udpSocket = socket(AF_INET, SOCK_DGRAM, 0);
+	udpSocket = socket(AF_INET, SOCK_DGRAM, 0);
 	
 	if(udpSocket <= 0)
 	{
@@ -46,6 +46,7 @@ int main(int argc, char** argv)
 		return -1;
 	}
 	
+	int count = 0;
 	int resp;
 	while(1)
 	{
@@ -57,14 +58,24 @@ int main(int argc, char** argv)
 		}
 		
 		write(2, "Got a message!\r\n", 16);
-		
-		resp = sendto(udpSocket, buffer, msglen, 0, &clientaddr, addrlen);
-		
-		if(resp <= 0)
+		if(count%2)
 		{
-			write(2, "The message could not be sent!\r\n", 32);
-			break;
+			write(2, "I'll respond...this time.\r\n", 27);
+			resp = sendto(udpSocket, buffer, msglen, 0, &clientaddr, addrlen);
+		
+			if(resp <= 0)
+			{
+				write(2, "The message could not be sent!\r\n", 32);
+				break;
+			}
 		}
+		
+		else
+		{
+			write(2, "Nope.\r\n", 7);
+		}
+		
+		count++;
 		
 	}
 	

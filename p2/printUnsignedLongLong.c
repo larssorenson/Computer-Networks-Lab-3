@@ -3,7 +3,7 @@
 void printUnsignedLongLong(unsigned long long number)
 {
 	
-	char output[12] = {0};
+	char output[20] = {0};
 	int length = 0;
 	while(number != 0)
 	{

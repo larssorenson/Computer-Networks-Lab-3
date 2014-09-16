@@ -1,4 +1,4 @@
-#include "mychecksum.h"
+#include "ping.h"
 
 void printLong(long number)
 {
