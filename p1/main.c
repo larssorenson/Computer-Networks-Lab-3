@@ -26,8 +26,17 @@ int main(int argc, char** argv)
 		writeTimeOfDay();
 		write(2, "Reminders set!\r\n", 16);
 		
-		// Set the first alarm
-		alarm(currentAlarm->time);
+		// Edge case for 0 time reminder, for those who are so inclined to break things.
+		if(currentAlarm->time <= 0)
+		{
+			writeAlarm(0);
+		}
+		
+		else
+		{
+			// Set the first alarm
+			alarm(currentAlarm->time);
+		}
 		
 		// Busy wait until all alarms have been processed.
 		// currentAlarm is a global linked list of alarms
