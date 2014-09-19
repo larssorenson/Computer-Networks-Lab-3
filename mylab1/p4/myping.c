@@ -56,17 +56,6 @@ int main(int argc, char** argv)
 	}
 	
 	int resp;
-		
-	resp = connect(udpSocket, (struct sockaddr*)&serveraddr, addrlen);
-	
-	if(resp <= -1)
-	{
-		write(2, "Failed to connect to the server!\r\n", 39);
-		#ifdef Debug
-			perror("Connect");
-		#endif
-		return -1;
-	}
 	
 	
 	struct timeval before;
