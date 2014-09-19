@@ -66,7 +66,7 @@ int main(int argc, char** argv)
 	
 	int resp;
 		
-	// Attempt to connect to the server
+	/*// Attempt to connect to the server
 	resp = connect(udpSocket, (struct sockaddr*)&serveraddr, addrlen);
 	
 	if(resp <= -1)
@@ -76,7 +76,7 @@ int main(int argc, char** argv)
 			perror("Connect");
 		#endif
 		return -1;
-	}
+	}*/
 	
 	
 	// Timestamp before we send the packet
