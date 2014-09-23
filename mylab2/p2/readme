@@ -1,13 +1,21 @@
 To compile:
-	With debugging enabled:
-		sh compile.sh 1
-	With debugging disabled:
+	Without Debugging:
 		sh compile.sh
 		OR
-		make all EXECUTABLE=mychecksum1
+		make
+	With Debugging:
+		sh compile.sh 1
 		OR
-		make all EXECUTABLE=mychecksum2
+		make DEBUG="-D Debug"
 		
 To run:
-	./mychecksum1 <in file> <out file>
-	./mychecksum2 <in file> <out file>
+	./myreminder <reminders.txt>
+	
+Reminders file struct:
+	<number> <message>\n
+	<number> <message>\n
+	...
+	<number> <message>
+	
+	Program only supports numerically sorted reminders list.
+	Behaviour is undefined for reminders that are not sorted numerically.
