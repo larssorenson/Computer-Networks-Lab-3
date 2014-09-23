@@ -1,15 +1,15 @@
 #include <fcntl.h>
 #include <sys/types.h>
 #include <sys/stat.h>
+#include <sys/socket.h>
 #include <sys/time.h>
 #include <unistd.h>
 #include <string.h>
 #include <stdlib.h>
 #include <signal.h>
-
-#ifdef Debug
-	#include <stdio.h>
-#endif
+#include <arpa/inet.h>
+#include <errno.h>
+#include <stdio.h>
 
 typedef struct Alarm Alarm;
 struct Alarm
@@ -21,13 +21,17 @@ struct Alarm
 };
 
 Alarm* currentAlarm;
+int udpSocket;
+struct sockaddr *registeredaddr;
+socklen_t addrlen;
 
-void printInt(int);
+void printLongInt(long int number, char* buffer);
 Alarm* parse(char*);
-void writeTimeOfDay();
+void writeTimeOfDay(char *);
 int addTimeToAlarm(char);
 char* timeToString(int);
 int setAlarmHandler();
 void setAlarm();
 void writeAlarm(int);
-
+int checkForValidity(char* in);
+int numberFromString(char* str);

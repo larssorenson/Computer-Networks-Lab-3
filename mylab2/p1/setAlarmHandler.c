@@ -1,4 +1,4 @@
-#include "myreminder.h"
+#include "mobilereminder.h"
 
 // Set the sig handler for SIGALRM
 int setAlarmHandler()

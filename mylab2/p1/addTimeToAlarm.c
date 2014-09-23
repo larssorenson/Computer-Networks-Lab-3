@@ -1,4 +1,4 @@
-#include "myreminder.h"
+#include "mobilereminder.h"
 
 int addTimeToAlarm(char time)
 {

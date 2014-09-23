@@ -1,4 +1,4 @@
-#include "myreminder.h"
+#include "mobilereminder.h"
 
 
 // This will take in an integer and go digit by digit through it

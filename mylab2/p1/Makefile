@@ -1,10 +1,10 @@
 CC		=gcc
 DEBUG		=-U Debug
 FLAGS		=-g -Wall $(DEBUG)
-SOURCES		=writeTimeOfDay.c main.c setAlarmHandler.c setAlarm.c timeToString.c writeAlarm.c parse.c addTimeToAlarm.c printInt.c
-HEADERS		=myreminder.h
+SOURCES		=writeTimeOfDay.c $(EXECUTABLE).c setAlarmHandler.c setAlarm.c timeToString.c writeAlarm.c parse.c addTimeToAlarm.c numberFromString.c checkForValidity.c printLongInt.c
+HEADERS		=mobilereminder.h
 OBJECTS		=$(SOURCES:.c=.o)
-EXECUTABLE	=myreminder
+EXECUTABLE	=mobilereminder
 RM		=rm -rf
 
 .SUFFIXES:

@@ -1,4 +1,4 @@
-#include "myreminder.h"
+#include "mobilereminder.h"
 
 void setAlarm()
 {
