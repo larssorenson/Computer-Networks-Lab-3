@@ -1,12 +1,12 @@
 #include "mobilereminder.h"
 
-// Set the sig handler for SIGALRM
-int setClientAlarmHandler()
+// Set our Child Hander
+int setChildHandler()
 {
 	struct sigaction sa;
 	memset(&sa, 0, sizeof(sa));
 	
 	sa.sa_handler = &handleChild;
 	
-	return sigaction(SIGALRM, &sa, NULL);
+	return sigaction(SIGCHLD, &sa, NULL );
 }

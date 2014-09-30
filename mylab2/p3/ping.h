@@ -11,3 +11,4 @@
 void printInt(int);
 void printLong(long);
 int numberFromString(char*);
+void* mallocAndCheck(size_t size);

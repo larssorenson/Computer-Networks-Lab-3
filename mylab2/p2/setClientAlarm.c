@@ -2,6 +2,10 @@
 
 void setClientAlarm()
 {
-	alarm(5);
-	alarmSet = 1;
+	if(!registered)
+	{
+		alarm(5);
+		alarmSet = 1;
+	}
+	
 }

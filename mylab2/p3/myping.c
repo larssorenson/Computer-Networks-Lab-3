@@ -25,11 +25,7 @@ int main(int argc, char** argv)
 	#endif
 	
 	// Malloc our '0' buffer
-	char *buffer = malloc(sizeof(char)*1025);
-	if(!buffer)
-	{
-		write(2, "Unable to malloc for buffer!\r\n", 30);
-	}
+	char *buffer = mallocAndCheck(sizeof(char)*1025);
 	
 	// Fill it with '0''s
 	for(int x = 0; x < 1024; x++)
@@ -65,19 +61,6 @@ int main(int argc, char** argv)
 	}
 	
 	int resp;
-		
-	/*// Attempt to connect to the server
-	resp = connect(udpSocket, (struct sockaddr*)&serveraddr, addrlen);
-	
-	if(resp <= -1)
-	{
-		write(2, "Failed to connect to the server!\r\n", 39);
-		#ifdef Debug
-			perror("Connect");
-		#endif
-		return -1;
-	}*/
-	
 	
 	// Timestamp before we send the packet
 	struct timeval before;

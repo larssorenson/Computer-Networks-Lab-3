@@ -13,6 +13,7 @@ Alarm* parse(char* file)
 		int resp;
 		int timeFlag = 0;
 		int msgCount = 0;
+		int reminderCount = 1;
 		
 		// If we have a proper file descriptor
 		if(fd > 1)
@@ -132,8 +133,14 @@ Alarm* parse(char* file)
 						// Maintain the chain
 						currentAlarm->next->prev = currentAlarm;
 						
+						// Number our alarm
+						currentAlarm->reminderNumber = reminderCount;
+						
 						// Move forward
 						currentAlarm = currentAlarm->next;
+						
+						// Increment our number scheme
+						reminderCount++;
 					}
 					
 				}

@@ -9,17 +9,16 @@ int main(int argc, char** argv)
 		return 1;
 	}
 	
-	char* secret = malloc(sizeof(char)*strlen(argv[3]));
+	char* secret = mallocAndCheck(sizeof(char)*strlen(argv[3]));
 	int alarm_flag = 0;
 	
 	addrlen = (socklen_t)sizeof(struct sockaddr_storage);
-	registeredaddr = malloc(addrlen);
+	registeredaddr = mallocAndCheck(addrlen);
 	
 	strcpy(secret, argv[3]);
 		
 	// Set the alarm handler for SIGALRM
-	int resp = setAlarmHandler();
-	if(resp)
+	if(setAlarmHandler())
 	{
 		write(2, "Error! Could not set Signal Alarm Handler!\r\n", 44);
 		return 1;
@@ -66,8 +65,9 @@ int main(int argc, char** argv)
 			return -1;
 		}
 		
-		int resp;
 		int valid = 0;
+		int lastReminder = -1;
+		int registered = 0;
 		while(currentAlarm != NULL)
 		{
 			memset(buffer, 0, 1024);
@@ -85,42 +85,82 @@ int main(int argc, char** argv)
 			#ifdef Debug
 				printf("Packet: %s\r\n", buffer);
 			#endif
+			#ifndef Debug
+				write(2, "Packet: ", 8);
+				write(2, buffer, strlen(buffer));
+				write(2, "\r\n", 2);
+			#endif
+			// Check our packet for validity.
+			// For the sake of reliability
+			// it will accept [a-zA-Z0-9\t]
 			valid = checkForValidity(buffer);
 			#ifdef Debug
 				printf("Valid? %s\r\n", (valid ? "True" : "False"));
 			#endif
+			
+			// If the packet is valid and it has our secret
 			if(valid && strstr(buffer, secret))
 			{
+				// Indicate registration!
 				write(2, "Got a valid registration!\r\n", 27);
-				sendto(udpSocket, "DropRegistration\r\n\r\n", 20, 0, registeredaddr, addrlen);
+				
+				// If we already had a client, we drop them.
+				if(registered)
+				{
+					mySendTo(udpSocket, "DropRegistration\r\n\r\n", (int)20, 0, registeredaddr, addrlen);
+				}
+				
+				// Copy our new address over our old address
 				memcpy(registeredaddr, &clientaddr, addrlen);
-				sendto(udpSocket, "Registered\r\n\r\n", 14, 0, registeredaddr, addrlen);
+				
+				// Send our new registration packet
+				mySendTo(udpSocket, "Registered\r\n\r\n", (int)14, 0, registeredaddr, addrlen);
+				
+				// If we haven't set an alarm before, we set one
 				if(!alarm_flag)
 				{
+					setAlarm();				
 					alarm_flag = 1;
-					if(currentAlarm->time <= 0)
-					{
-						writeAlarm(0);
-					}
-	
-					else
-					{
-						// Set the first alarm
-						alarm(currentAlarm->time);
-					}
 				}
+				
+				// Otherwise, we rewind to the first alarm and start again
+				else
+				{
+					rewindAlarms(0);
+					setAlarm();				
+					alarm_flag = 1;
+					
+				}
+				
 			}
 			
+			// If our received packet is invalid, we discard it
 			else if (!valid)
 			{
 				write(2, "Invalid. Discarding\r\n", 21);
 				continue; 
 			}
 			
+			// If we've received a Resend packet, we will rewind
+			// to the specified reminder and resend it.
+			else if (strstr(buffer, "Resend\t"))
+			{
+				lastReminder = numberFromString(buffer+7);
+				#ifdef Debug
+					printf("Rewind to: %d\r\n", lastReminder);
+				#endif
+				rewindAlarms(lastReminder);
+				#ifdef Debug
+					printf("Rewinded to: %d\r\n", currentAlarm->reminderNumber);
+				#endif
+				sendPacket();
+			}
+			
+			// Valid packet with invalid secret key
+			// Let the client know they failed
 			else
 			{
-				sendto(udpSocket, "Invalid Secret Key.\r\n", 22, 0, &clientaddr, addrlen);
-				sendto(udpSocket, "Exit\r\n\r\n",8, 0, &clientaddr, addrlen);
+				mySendTo(udpSocket, "Invalid Secret Key.\r\n", 22, 0, &clientaddr, addrlen);
 				write(2, "Invalid Secret Key.\r\n", 21);
 				continue;
 			}

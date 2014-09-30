@@ -2,14 +2,17 @@ To compile:
 	Without Debugging:
 		sh compile.sh
 		OR
-		make
+		make all EXECUTABLE=mobilereminderd
+		make all EXECUTABLE=mobilereminder
 	With Debugging:
 		sh compile.sh 1
 		OR
-		make DEBUG="-D Debug"
+		make all DEBUG="-D Debug" EXECUTABLE=mobilereminderd
+		make all DEBUG="-D Debug" EXECUTABLE=mobilereminder
 		
 To run:
-	./myreminder <reminders.txt>
+	./mobilereminderd <reminders.txt> <port> <secret key>
+	./mobilereminder <ip> <port> <secret key>
 	
 Reminders file struct:
 	<number> <message>\n

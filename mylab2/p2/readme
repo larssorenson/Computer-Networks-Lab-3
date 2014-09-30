@@ -1,15 +1,25 @@
+This version of the mobile reminder program will attempt to maintain a reliable connection through UDP.
+The client will register with the server.
+The server will acknowledge the registration.
+If a new client connects, the server will drop the old client.
+The client will request that a missed packet be retransmitted, by tracking which reminders it has received
+	and which it has not.
+
 To compile:
 	Without Debugging:
 		sh compile.sh
 		OR
-		make
+		make all EXECUTABLE=mobilereminderd
+		make all EXECUTABLE=mobilereminder
 	With Debugging:
 		sh compile.sh 1
 		OR
-		make DEBUG="-D Debug"
+		make all DEBUG="-D Debug" EXECUTABLE=mobilereminderd
+		make all DEBUG="-D Debug" EXECUTABLE=mobilereminder
 		
 To run:
-	./myreminder <reminders.txt>
+	./mobilereminderd <reminders.txt> <port> <secret key>
+	./mobilereminder <ip> <port> <secret key>
 	
 Reminders file struct:
 	<number> <message>\n
@@ -19,3 +29,5 @@ Reminders file struct:
 	
 	Program only supports numerically sorted reminders list.
 	Behaviour is undefined for reminders that are not sorted numerically.
+	
+	Note that the behaviour may result in a loop if two or more reminders are close enough together in time

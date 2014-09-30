@@ -67,12 +67,32 @@ int main(int argc, char** argv)
 		// Indicate our success
 		write(2, "Got a message!\r\n", 16);
 		
-		// Send it right back to them, round trip baby!
-		resp = sendto(udpSocket, buffer, msglen, 0, &clientaddr, addrlen);
-		if(resp <= 0)
+		// FORK!
+		int pid = fork();
+		#ifdef Debug
+			printf("PID: %d\r\n", pid);
+		#endif
+		// Child process
+		if(pid == 0)
 		{
-			write(2, "The message could not be sent!\r\n", 32);
+			// Send it right back to them, round trip baby!
+			resp = sendto(udpSocket, buffer, msglen, 0, &clientaddr, addrlen);
+			if(resp <= 0)
+			{
+				write(2, "The message could not be sent!\r\n", 32);
+				break;
+			}
+		}
+		// Failed to fork	
+		else if (pid == -1)
+		{
+			perror("Fork failed");
 			break;
+		}
+		// We're the parent, so we do nothing.
+		else
+		{
+			
 		}
 		
 	}

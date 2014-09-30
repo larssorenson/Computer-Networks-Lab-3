@@ -23,6 +23,12 @@ int numberFromString(char* str)
 			result *= 10;
 		}
 		
+		else
+		{
+			result /= 10;
+			return result;
+		}
+		
 		x++;
 		
 	}

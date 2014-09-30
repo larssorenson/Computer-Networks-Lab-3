@@ -15,6 +15,12 @@ char* timeToString(int time)
 	
 	memset(result, 0, 11);
 	int length = 0;
+	if(time == 0)
+	{
+		result[length] = 48;
+		return result;
+	}
+	
 	while(time > 0)
 	{
 		result[length] = (char)((time - (((int)(time/10))*10))+48);

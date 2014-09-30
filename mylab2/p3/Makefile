@@ -2,7 +2,7 @@ CC		=gcc
 DEBUG		=-U Debug
 FLAGS		=-g -Wall -std=c99 $(DEBUG)
 EXECUTABLE	=mypingd
-SOURCES		=$(EXECUTABLE).c printInt.c numberFromString.c
+SOURCES		=$(EXECUTABLE).c printInt.c numberFromString.c mallocAndCheck.c
 HEADERS		=ping.h
 OBJECTS		=$(SOURCES:.c=.o)
 RM		=rm -rf
