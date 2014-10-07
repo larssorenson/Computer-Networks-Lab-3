@@ -32,8 +32,8 @@ int main(int argc, char** argv)
 	
 	
 	// Socket alloc
-	int udpSocket = socket(AF_INET, SOCK_DGRAM, 0);
-	if(udpSocket <= 0)
+	int tcpSocket = socket(AF_INET, SOCK_STREAM, 0);
+	if(tcpSocket <= 0)
 	{
 		write(2, "Unable to bind socket!\r\n", 24);
 		return -1;
@@ -46,23 +46,32 @@ int main(int argc, char** argv)
 	myaddr.sin_addr.s_addr = INADDR_ANY;
 	
 	// Bind up the socket to myself
-	if(bind(udpSocket, (struct sockaddr*)&myaddr, sizeof(struct sockaddr)))
+	if(bind(tcpSocket, (struct sockaddr*)&myaddr, sizeof(struct sockaddr)))
 	{
 		perror("Bind");
 		return -1;
 	}
 	
+	if(listen(tcpSocket, 1) != 0)
+	{
+		perror("Listen");
+		return -1;
+	}
+	
+	int new_socket;
 	// Infinite response
 	int resp;
 	while(1)
 	{
-		// receive the message
-		resp = recvfrom(udpSocket, buffer, 1024, 0, &clientaddr, &addrlen);
-		if(resp <= 0)
+		if((new_socket = accept(tcpSocket, &clientaddr, &addrlen)) < 0)
 		{
-			write(2, "Failed to receive message!\r\n", 28);
-			break;
+			perror("Accept");
+			return -1;
 		}
+
+		// receive the message
+		while(read(new_socket, buffer, 1024) <= 0)
+		{}
 		
 		// Indicate our success
 		write(2, "Got a message!\r\n", 16);
@@ -76,7 +85,7 @@ int main(int argc, char** argv)
 		if(pid == 0)
 		{
 			// Send it right back to them, round trip baby!
-			resp = sendto(udpSocket, buffer, msglen, 0, &clientaddr, addrlen);
+			resp = write(new_socket, buffer, 1024);
 			if(resp <= 0)
 			{
 				write(2, "The message could not be sent!\r\n", 32);

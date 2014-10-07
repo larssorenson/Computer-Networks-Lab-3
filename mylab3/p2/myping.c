@@ -40,8 +40,8 @@ int main(int argc, char** argv)
 	socklen_t addrlen = (socklen_t)sizeof(struct sockaddr_storage);
 	
 	// Pick up a socket
-	int udpSocket = socket(AF_INET, SOCK_DGRAM, 0);
-	if(udpSocket <= 0)
+	int tcpSocket = socket(AF_INET, SOCK_STREAM, 0);
+	if(tcpSocket <= 0)
 	{
 		write(2, "Unable to bind socket!\r\n", 24);
 		return -1;
@@ -60,6 +60,12 @@ int main(int argc, char** argv)
 		return -1;
 	}
 	
+	if(connect(tcpSocket, (struct sockaddr *)&serveraddr, addrlen))
+	{
+		perror("Connect");
+		return -1;
+	}
+	
 	int resp;
 	
 	// Timestamp before we send the packet
@@ -68,7 +74,7 @@ int main(int argc, char** argv)
 	struct timeval after;
 	
 	// Send aforementioned packet
-	resp = sendto(udpSocket, buffer, msglen, 0, (struct sockaddr*)&serveraddr, addrlen);
+	resp = write(tcpSocket, buffer, msglen);
 	
 	if(resp <= 0)
 	{
@@ -77,7 +83,7 @@ int main(int argc, char** argv)
 	}
 	
 	// Busy wait for response
-	while(recvfrom(udpSocket, buffer, 1024, 0, (struct sockaddr*)&serveraddr, &addrlen) <= 0)
+	while(read(tcpSocket, buffer, 1024) <= 0)
 	{}
 	
 	
@@ -90,6 +96,6 @@ int main(int argc, char** argv)
 	printf("To: %s at port %d\r\nTotal Time: %d nanoseconds\r\n", argv[1], port, (int)(after.tv_usec - before.tv_usec));
 
 	// Close up the connection
-	close(udpSocket);	
+	close(tcpSocket);	
 	return 0;
 }
