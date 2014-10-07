@@ -1,0 +1,22 @@
+To: 128.10.25.101 at port 50505
+Total Time: 98 nanoseconds
+To: 128.10.25.101 at port 50505
+Total Time: 83 nanoseconds
+To: 128.10.25.101 at port 50505
+Total Time: 89 nanoseconds
+To: 128.10.25.101 at port 50505
+Total Time: 86 nanoseconds
+To: 128.10.25.101 at port 50505
+Total Time: 85 nanoseconds
+To: 128.10.25.101 at port 50505
+Total Time: 90 nanoseconds
+To: 128.10.25.101 at port 50505
+Total Time: 90 nanoseconds
+To: 128.10.25.101 at port 50505
+Total Time: 93 nanoseconds
+To: 128.10.25.101 at port 50505
+Total Time: 86 nanoseconds
+To: 128.10.25.101 at port 50505
+Total Time: 82 nanoseconds
+
+Average: 88.2
