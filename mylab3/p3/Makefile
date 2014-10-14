@@ -2,8 +2,8 @@ CC		=gcc
 DEBUG		=-U Debug
 FLAGS		=-g -Wall -std=c99 $(DEBUG)
 EXECUTABLE	=vpntunneld
-SOURCES		=$(EXECUTABLE).c mallocAndCheck.c checkArgc.c populateSockAddr.c numberFromString.c parseAndCheckPort.c bindUDPSocket.c
-HEADERS		=vpntunnel.h
+SOURCES		=$(EXECUTABLE).c mallocAndCheck.c checkArgc.c numberFromString.c parseAndCheckPort.c bindUDPSocket.c
+HEADERS		=vpntunnel.h globals.h types.h functions.h includes.h
 OBJECTS		=$(SOURCES:.c=.o)
 RM		=rm -rf
 

@@ -7,10 +7,6 @@ int main(int argc, char** argv)
 		return 1;
 	}
 	
-	int serverPort = parseAndCheckPort(argv[4]);
-	#ifdef Debug
-		printf("Server Port: %d\r\n", serverPort);
-	#endif
 	
 	int vpnPort = parseAndCheckPort(argv[2]);
 	#ifdef Debug
@@ -33,30 +29,32 @@ int main(int argc, char** argv)
 		buffer[x] = 0;
 	
 	socklen_t addrlen = (socklen_t)sizeof(struct sockaddr_storage);
-	struct sockaddr vpnaddr;
-	struct sockaddr serveraddr;
+	struct sockaddr_in vpnaddr;
 	
 	int udpSocket = bindUDPSocket();
 	
-	int resp = populateSockAddr(AF_INET, (struct sockaddr_in*)&vpnaddr, addrlen, vpnPort, argv[1]);
-	if(resp < 0)
+	vpnaddr.sin_family = AF_INET;
+	vpnaddr.sin_port = htons(vpnPort);
+	
+	// Parse the arg given to us for the IP
+	if(inet_pton(AF_INET, argv[1], &(vpnaddr.sin_addr)) <= 0)
 	{
-		return 1;
+		write(2, "Failed to parse IP Address!\r\n", 29);
+		return -1;
 	}
 	
-	resp = populateSockAddr(AF_INET, (struct sockaddr_in*)&serveraddr, addrlen, serverPort, argv[3]);
-	if(resp < 0)
-	{
-		return 1;
-	}
+	#ifdef Debug
+		printf("Server Address: %s\r\n", inet_ntoa(vpnaddr.sin_addr));
+	#endif
 	
 	strcpy(buffer, secret);
 	strcat(buffer, "\r\n");
 	strcat(buffer, argv[3]);
 	strcat(buffer, "\r\n");
 	strcat(buffer, argv[4]);
+	strcat(buffer, "\r\n");
 	
-	if(sendto(udpSocket, buffer, msglen, 0, &vpnaddr, addrlen) <= 0)
+	if(sendto(udpSocket, buffer, msglen, 0, (struct sockaddr *)&vpnaddr, addrlen) <= 0)
 	{
 		perror("Sendto");
 		return 1;

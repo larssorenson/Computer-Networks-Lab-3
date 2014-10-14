@@ -26,11 +26,13 @@ int main(int argc, char** argv)
 	memset(buffer, 0, 1024);
 	
 	socklen_t addrlen = (socklen_t)sizeof(struct sockaddr_storage);
-	struct sockaddr *vpnaddr = NULL;
+	struct sockaddr vpnaddr;
 	
 	int udpSocket = bindUDPSocket();
 	
 	struct sockaddr clientaddr;
+	struct sockaddr_in serveraddr;
+	
 	// Set up my address, for port binding
 	struct sockaddr_in myaddr;
 	myaddr.sin_family = AF_INET;
@@ -44,9 +46,91 @@ int main(int argc, char** argv)
 		return -1;
 	}
 	
-	while(recvfrom(udpSocket, buffer, 1024, 0, &clientaddr, &addrlen) <= 0)
-	{ }
+	while(1)
+	{
+		while(recvfrom(udpSocket, buffer, 1024, 0, &clientaddr, &addrlen) <= 0)
+		{ }
 	
-	printf("Packet:\r\n%s\r\n", buffer);
+		printf("Packet:\r\n%s\r\n", buffer);
+		int c;
+		
+		char* secret;
+		int secretLen = 0;
+		int secretFlag = 0;
+		
+		char* ip;
+		int ipLen = 0;
+		int ipFlag = 0;
+		
+		char* recPort;
+		int portLen = 0;
+		
+		for(c = 0; c < strlen(buffer); c++)
+		{
+			if(!secretFlag)
+			{
+				if(buffer[c] != '\n')
+					secretLen++;
+				else
+				{
+					secret = mallocAndCheck(secretLen+1);
+					strncpy(secret, buffer, secretLen);
+					secret[secretLen] = '\0';
+					secretFlag = 1;
+					#ifdef Debug
+						printf("Secret Received: %s\r\n", secret);
+					#endif
+				}
+				
+			}
+			
+			else if (!ipFlag)
+			{
+				if(buffer[c] != '\n')
+					ipLen++;
+				else
+				{
+					ip = mallocAndCheck(ipLen+1);
+					strncpy(ip, buffer+(secretLen+1), ipLen);
+					ip[ipLen] = '\0';
+					ipFlag = 1;
+					#ifdef Debug
+						printf("IP Received: %s\r\n", ip);
+					#endif
+				}
+				
+			}
+			
+			else
+			{
+				if(buffer[c] != '\n')
+					portLen++;
+			}
+			
+		}
+		
+		recPort = mallocAndCheck(portLen+1);
+		strncpy(recPort, buffer+(secretLen+1)+(ipLen+1), portLen);
+		recPort[portLen] = '\0';
+		#ifdef Debug
+			printf("Port Received: %s\r\n", recPort);
+		#endif
+	
+		int serverPort = parseAndCheckPort(recPort);
+		#ifdef Debug
+			printf("Server Port: %d\r\n", serverPort);
+		#endif
+	
+		serveraddr.sin_family = AF_INET;
+		serveraddr.sin_port = htons(serverPort);
+		
+		// Parse the IP
+		if(inet_pton(AF_INET, ip, &(serveraddr.sin_addr.s_addr)) <= 0)
+		{
+			write(2, "Failed to parse IP Address!\r\n", 29);
+			return -1;
+		}
+	
+	}
 	
 }
