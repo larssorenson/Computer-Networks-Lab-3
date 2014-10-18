@@ -10,6 +10,7 @@
 #include <arpa/inet.h>
 #include <errno.h>
 #include <stdio.h>
+#include <sys/wait.h>
 
 typedef struct Alarm Alarm;
 struct Alarm
@@ -47,4 +48,4 @@ int numberFromString(char* str);
 int setClientAlarmHandler();
 void registration(int sig);
 void setClientAlarm();
-
+void handleChild(int sig);

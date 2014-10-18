@@ -2,7 +2,7 @@
 
 int main(int argc, char** argv)
 {
-	if(checkArgc(argc, 2, "You must supply a VPN Port and Secret Key!"))
+	if(checkArgc(argc, 2, "You must supply a VPN Port!"))
 	{
 		return 1;
 	}
@@ -12,25 +12,14 @@ int main(int argc, char** argv)
 		printf("Port: %d\r\n", port);
 	#endif
 	
-	char* secret = mallocAndCheck(sizeof(char)*strlen(argv[2]));
-	int x;
-	for(x = 0; x < strlen(argv[2]); x++)
-		secret[x] = 0;
-	
-	strcpy(secret, argv[2]);
-	#ifdef Debug
-		printf("Secret: %s\r\n", secret);
-	#endif
-	
 	char* buffer = mallocAndCheck(1024);
 	memset(buffer, 0, 1024);
 	
 	socklen_t addrlen = (socklen_t)sizeof(struct sockaddr_storage);
-	struct sockaddr vpnaddr;
 	
 	int udpSocket = bindUDPSocket();
 	
-	struct sockaddr clientaddr;
+	struct sockaddr_in clientaddr;
 	struct sockaddr_in serveraddr;
 	
 	// Set up my address, for port binding
@@ -48,15 +37,11 @@ int main(int argc, char** argv)
 	
 	while(1)
 	{
-		while(recvfrom(udpSocket, buffer, 1024, 0, &clientaddr, &addrlen) <= 0)
+		while(recvfrom(udpSocket, buffer, 1024, 0, (struct sockaddr *)&clientaddr, &addrlen) <= 0)
 		{ }
 	
 		printf("Packet:\r\n%s\r\n", buffer);
 		int c;
-		
-		char* secret;
-		int secretLen = 0;
-		int secretFlag = 0;
 		
 		char* ip;
 		int ipLen = 0;
@@ -65,33 +50,18 @@ int main(int argc, char** argv)
 		char* recPort;
 		int portLen = 0;
 		
+		// Parse the packet for our IP address, port and secret.
+		// This will allow us to redirect packets back to the client
 		for(c = 0; c < strlen(buffer); c++)
 		{
-			if(!secretFlag)
-			{
-				if(buffer[c] != '\n')
-					secretLen++;
-				else
-				{
-					secret = mallocAndCheck(secretLen+1);
-					strncpy(secret, buffer, secretLen);
-					secret[secretLen] = '\0';
-					secretFlag = 1;
-					#ifdef Debug
-						printf("Secret Received: %s\r\n", secret);
-					#endif
-				}
-				
-			}
-			
-			else if (!ipFlag)
+			if (!ipFlag)
 			{
 				if(buffer[c] != '\n')
 					ipLen++;
 				else
 				{
 					ip = mallocAndCheck(ipLen+1);
-					strncpy(ip, buffer+(secretLen+1), ipLen);
+					strncpy(ip, buffer, ipLen);
 					ip[ipLen] = '\0';
 					ipFlag = 1;
 					#ifdef Debug
@@ -110,7 +80,7 @@ int main(int argc, char** argv)
 		}
 		
 		recPort = mallocAndCheck(portLen+1);
-		strncpy(recPort, buffer+(secretLen+1)+(ipLen+1), portLen);
+		strncpy(recPort, buffer+(ipLen+1), portLen);
 		recPort[portLen] = '\0';
 		#ifdef Debug
 			printf("Port Received: %s\r\n", recPort);
@@ -125,10 +95,28 @@ int main(int argc, char** argv)
 		serveraddr.sin_port = htons(serverPort);
 		
 		// Parse the IP
-		if(inet_pton(AF_INET, ip, &(serveraddr.sin_addr.s_addr)) <= 0)
+		if(inet_pton(AF_INET, ip, &(serveraddr.sin_addr)) < 0)
 		{
-			write(2, "Failed to parse IP Address!\r\n", 29);
+			perror("IP Parse");
 			return -1;
+		}
+		
+		int newPort = ntohs(((struct sockaddr_in *)&serveraddr)->sin_port)-1;
+		
+		// Fork for this port and ip
+		dedicatedForwarding(*((struct sockaddr_in *)&serveraddr), *((struct sockaddr_in *)&clientaddr), *((struct sockaddr_in *)&myaddr), newPort);
+		
+		char* message = mallocAndCheck(8);
+		memset(message, 0, 8);
+		
+		char* portPacket = timeToString(newPort);
+		
+		printf("Sending port %s to client\r\n", portPacket);
+		
+		if(sendto(udpSocket, portPacket, strlen(portPacket), 0, (struct sockaddr *)&clientaddr, addrlen) <= 0)
+		{
+			perror("Sendto");
+			return 1;
 		}
 	
 	}
