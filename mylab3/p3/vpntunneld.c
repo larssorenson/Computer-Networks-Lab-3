@@ -62,7 +62,7 @@ int main(int argc, char** argv)
 				{
 					ip = mallocAndCheck(ipLen+1);
 					strncpy(ip, buffer, ipLen);
-					ip[ipLen] = '\0';
+					ip[ipLen-1] = '\0';
 					ipFlag = 1;
 					#ifdef Debug
 						printf("IP Received: %s\r\n", ip);
@@ -101,10 +101,12 @@ int main(int argc, char** argv)
 			return -1;
 		}
 		
+		printf("Parsed IP: %s\r\n", inet_ntoa(serveraddr.sin_addr));
+		
 		int newPort = ntohs(((struct sockaddr_in *)&serveraddr)->sin_port)-1;
 		
 		// Fork for this port and ip
-		dedicatedForwarding(*((struct sockaddr_in *)&serveraddr), *((struct sockaddr_in *)&clientaddr), *((struct sockaddr_in *)&myaddr), newPort);
+		dedicatedForwarding(serveraddr, clientaddr, myaddr, newPort);
 		
 		char* message = mallocAndCheck(8);
 		memset(message, 0, 8);

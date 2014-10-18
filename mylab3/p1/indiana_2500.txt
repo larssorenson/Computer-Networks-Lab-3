@@ -1,0 +1,15 @@
+PING indiana.edu (129.79.78.192) 2500(2528) bytes of data.
+2508 bytes from www.indiana.edu (129.79.78.192): icmp_seq=1 ttl=56 time=3.97 ms
+2508 bytes from www.indiana.edu (129.79.78.192): icmp_seq=2 ttl=56 time=3.98 ms
+2508 bytes from www.indiana.edu (129.79.78.192): icmp_seq=3 ttl=56 time=4.01 ms
+2508 bytes from www.indiana.edu (129.79.78.192): icmp_seq=4 ttl=56 time=3.66 ms
+2508 bytes from www.indiana.edu (129.79.78.192): icmp_seq=5 ttl=56 time=4.27 ms
+2508 bytes from www.indiana.edu (129.79.78.192): icmp_seq=6 ttl=56 time=3.95 ms
+2508 bytes from www.indiana.edu (129.79.78.192): icmp_seq=7 ttl=56 time=4.23 ms
+2508 bytes from www.indiana.edu (129.79.78.192): icmp_seq=8 ttl=56 time=4.09 ms
+2508 bytes from www.indiana.edu (129.79.78.192): icmp_seq=9 ttl=56 time=3.85 ms
+2508 bytes from www.indiana.edu (129.79.78.192): icmp_seq=10 ttl=56 time=3.97 ms
+
+--- indiana.edu ping statistics ---
+10 packets transmitted, 10 received, 0% packet loss, time 9012ms
+rtt min/avg/max/mdev = 3.663/4.001/4.274/0.175 ms

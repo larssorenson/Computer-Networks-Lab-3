@@ -1,0 +1,13 @@
+traceroute to brandeis.edu (129.64.99.200), 30 hops max, 60 byte packets
+ 1  switch-lwsn2133-z1r11.cs.purdue.edu (128.10.25.250)  0.257 ms  0.250 ms  0.339 ms
+ 2  lwsn-b143-c6504e-01-po11-tcom.cs.purdue.edu (128.10.127.251)  0.957 ms  0.983 ms  0.979 ms
+ 3  itns-core-vss-01-vlan4094.tcom.purdue.edu (172.28.0.1)  19.436 ms  19.576 ms  19.626 ms
+ 4  tel-210-c9006-01-te0-0-0-2.tcom.purdue.edu (172.28.252.85)  1.261 ms  1.281 ms  1.227 ms
+ 5  indiana-gigapop-ctc-internet2-150.tcom.purdue.edu (192.5.40.86)  2.388 ms  2.386 ms  2.382 ms
+ 6  et-10-0-0.101.rtr.chic.net.internet2.edu (149.165.254.186)  19.741 ms  18.577 ms  18.570 ms
+ 7  et-10-0-0.107.rtr.clev.net.internet2.edu (198.71.45.9)  17.205 ms  16.998 ms  17.022 ms
+ 8  nox1sumgw1-vl-112-nox-i2.nox.org (192.5.89.17)  30.718 ms  30.680 ms  30.636 ms
+ 9  207.210.143.122 (207.210.143.122)  30.714 ms  30.771 ms  30.760 ms
+10  * * *
+11  * * *
+12  websrv-prod.unet.brandeis.edu (129.64.99.200)  30.930 ms !X  30.989 ms !X  30.979 ms !X

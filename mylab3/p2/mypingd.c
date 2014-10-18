@@ -27,9 +27,8 @@ int main(int argc, char** argv)
 	struct sockaddr clientaddr;
 	socklen_t addrlen = (socklen_t)sizeof(struct sockaddr_storage);
 	
-	char buffer[1024];
 	int msglen = 1024;
-	
+	char buffer[msglen];
 	
 	// Socket alloc
 	int tcpSocket = socket(AF_INET, SOCK_STREAM, 0);
@@ -70,7 +69,7 @@ int main(int argc, char** argv)
 		}
 
 		// receive the message
-		while(read(new_socket, buffer, 1024) <= 0)
+		while(read(new_socket, buffer, msglen) <= 0)
 		{}
 		
 		// Indicate our success
@@ -85,7 +84,7 @@ int main(int argc, char** argv)
 		if(pid == 0)
 		{
 			// Send it right back to them, round trip baby!
-			resp = write(new_socket, buffer, 1024);
+			resp = write(new_socket, buffer, msglen);
 			if(resp <= 0)
 			{
 				write(2, "The message could not be sent!\r\n", 32);

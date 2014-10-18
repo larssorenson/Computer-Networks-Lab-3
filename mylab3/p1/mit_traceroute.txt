@@ -1,0 +1,9 @@
+traceroute to mit.edu (23.199.192.128), 30 hops max, 60 byte packets
+ 1  switch-lwsn2133-z1r11.cs.purdue.edu (128.10.25.250)  0.256 ms  0.249 ms  0.245 ms
+ 2  lwsn-b143-c6504e-01-po11-tcom.cs.purdue.edu (128.10.127.251)  0.687 ms  0.719 ms  0.867 ms
+ 3  itns-core-vss-01-vlan4094.tcom.purdue.edu (172.28.0.1)  2.252 ms  2.358 ms  2.188 ms
+ 4  tel-210-c9006-01-te0-0-0-2.tcom.purdue.edu (172.28.252.85)  1.102 ms  1.295 ms  1.293 ms
+ 5  indiana-gigapop-ctc-internet-151.tcom.purdue.edu (192.5.40.82)  2.211 ms  2.209 ms  2.206 ms
+ 6  149.165.183.78 (149.165.183.78)  7.100 ms  6.879 ms  6.866 ms
+ 7  equinix-ord.netarch.akamai.com (206.223.119.102)  7.347 ms  7.693 ms  7.712 ms
+ 8  a23-199-192-128.deploy.static.akamaitechnologies.com (23.199.192.128)  7.557 ms  7.477 ms  7.570 ms

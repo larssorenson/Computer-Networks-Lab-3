@@ -1,0 +1,15 @@
+PING mit.edu (23.199.192.128) 56(84) bytes of data.
+64 bytes from a23-199-192-128.deploy.static.akamaitechnologies.com (23.199.192.128): icmp_seq=1 ttl=57 time=7.75 ms
+64 bytes from a23-199-192-128.deploy.static.akamaitechnologies.com (23.199.192.128): icmp_seq=2 ttl=57 time=7.66 ms
+64 bytes from a23-199-192-128.deploy.static.akamaitechnologies.com (23.199.192.128): icmp_seq=3 ttl=57 time=7.84 ms
+64 bytes from a23-199-192-128.deploy.static.akamaitechnologies.com (23.199.192.128): icmp_seq=4 ttl=57 time=7.69 ms
+64 bytes from a23-199-192-128.deploy.static.akamaitechnologies.com (23.199.192.128): icmp_seq=5 ttl=57 time=12.1 ms
+64 bytes from a23-199-192-128.deploy.static.akamaitechnologies.com (23.199.192.128): icmp_seq=6 ttl=57 time=7.59 ms
+64 bytes from a23-199-192-128.deploy.static.akamaitechnologies.com (23.199.192.128): icmp_seq=7 ttl=57 time=7.71 ms
+64 bytes from a23-199-192-128.deploy.static.akamaitechnologies.com (23.199.192.128): icmp_seq=8 ttl=57 time=7.71 ms
+64 bytes from a23-199-192-128.deploy.static.akamaitechnologies.com (23.199.192.128): icmp_seq=9 ttl=57 time=7.61 ms
+64 bytes from a23-199-192-128.deploy.static.akamaitechnologies.com (23.199.192.128): icmp_seq=10 ttl=57 time=7.75 ms
+
+--- mit.edu ping statistics ---
+10 packets transmitted, 10 received, 0% packet loss, time 9014ms
+rtt min/avg/max/mdev = 7.596/8.151/12.170/1.345 ms
